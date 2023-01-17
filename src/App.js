@@ -10,11 +10,7 @@ const questions = [
   },
   {
     title: "Компонент - это ... ",
-    variants: [
-      "приложение",
-      "часть приложения или страницы",
-      "то, что я не знаю что такое",
-    ],
+    variants: ["приложение", "часть приложения или страницы", "страница"],
     correct: 1,
   },
   {
@@ -28,12 +24,16 @@ const questions = [
   },
 ];
 
-function Result() {
+function Result({ correct }) {
   return (
     <div className="result">
       <img src="https://cdn-icons-png.flaticon.com/512/2278/2278992.png" />
-      <h2>Вы отгадали 3 ответа из 10</h2>
-      <button>Попробовать снова</button>
+      <h2>
+        Вы отгадали {correct} ответа из {questions.length}
+      </h2>
+      <a href="/">
+        <button>Попробовать снова</button>
+      </a>
     </div>
   );
 }
@@ -62,19 +62,21 @@ function Game({ step, question, onClickVariant }) {
 
 function App() {
   const [step, setStep] = useState(0);
+  const [correct, setCorrect] = useState(0);
+  const question = questions[step];
 
   const onClickVariant = (index) => {
-    console.log(step, index);
     setStep(step + 1);
+    if (index === question.correct) {
+      setCorrect(correct + 1);
+    }
   };
-  const question = questions[step];
-  console.log(question);
   return (
     <div className="App">
       {step !== questions.length ? (
         <Game step={step} question={question} onClickVariant={onClickVariant} />
       ) : (
-        <Result />
+        <Result correct={correct} />
       )}
     </div>
   );
